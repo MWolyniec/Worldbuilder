@@ -1,0 +1,47 @@
+﻿@page
+@model Worldbuilder.Pages.Categories.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Category</h4>
+<hr />
+<div class="row">
+    <form method="post">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Category.Name" class="control-label"></label>
+                <br />
+                <span asp-validation-for="Category.Name" class="text-danger"></span>
+                <input asp-for="Category.Name" class="form-control" />
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="Category.AddDesc" class="control-label"></label>
+                <br />
+                <span asp-validation-for="Category.AddDesc" class="text-danger"></span>
+                <textarea asp-for="Category.AddDesc" class="form-control" rows="12" cols="80"></textarea>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+    </div>
+
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

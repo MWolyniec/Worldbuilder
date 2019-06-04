@@ -1,0 +1,65 @@
+﻿@page
+@model Worldbuilder.Pages.Bricks.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table" style="text-align:center;">
+    <thead>
+        <tr>
+            <th style="text-align:left;">
+                @Html.DisplayNameFor(model => model.Brick[0].Name)
+            </th>
+            <th style="text-align:left;">
+                @Html.DisplayNameFor(model => model.Brick[0].ShortDesc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brick[0].BrickCategories)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brick[0].Children)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Brick) {
+        <tr>
+            <td style="text-align:left;">
+                <a asp-page="./Edit" asp-route-id="@item.Id">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+            </td>
+            <td style="text-align:left;">
+                @Html.DisplayFor(modelItem => item.ShortDesc)
+            </td>
+            <td>
+                @if(item.BrickCategories != null)
+                {
+                    foreach(var category in item.BrickCategories)
+                    {
+                        <text>| </text>
+                        @Html.DisplayFor(modelItem => category.Category.Name)
+                        <text> |</text>
+                    }
+                }
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.Children.Count)
+                 
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
