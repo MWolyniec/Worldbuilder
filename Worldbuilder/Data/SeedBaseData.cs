@@ -16,55 +16,99 @@ namespace Worldbuilder.Models
             {
                 if(context.Categories.Any() || context.Brick.Any()) return;
 
+                #region Category Types
+
+                var geography = new CategoryType()
+                {
+                    Name = "geography"
+                };
+
+                var beliefs = new CategoryType()
+                {
+                    Name = "beliefs, religion, spirituality"
+                };
+
+                var cosmology = new CategoryType()
+                {
+                    Name = "cosmology"
+                };
+
+                var biology = new CategoryType()
+                {
+                    Name = "biology"
+                };
+
+                var something = new CategoryType()
+                {
+                    Name = "something"
+                };
+
+                var beings = new CategoryType()
+                {
+                    Name = "beings"
+                };
+
+                #endregion
+
+                var catTypes = new[] { geography, beliefs, cosmology, biology };
 
                 #region Categories
                 var ocean = new Model.Category
                 {
                     Name = "Ocean",
-                    AddDesc = "Vast and a continuous frame of salty water, often taking a large part of planet's surface."
+                    Description = "Vast and a continuous frame of salty water, often taking a large part of planet's surface.",
+                    CategoryType = geography
                 };
                 var sea = new Model.Category
                 {
                     Name = "Sea",
-                    AddDesc = "Body of salt water, smaller and shallower than ocean."
+                    Description = "Body of salt water, smaller and shallower than ocean.",
+                    CategoryType = geography
                 };
 
                 var continent = new Model.Category
                 {
                     Name = "Continent",
-                    AddDesc = "Any of a world's main continuous expanses of land."
+                    Description = "Any of a world's main continuous expanses of land.",
+                    CategoryType = geography
                 };
                 var world = new Model.Category
                 {
                     
                     Name = "World",
-                    AddDesc = "Place in the universe or the multiverse characterized by connected set of culture or history." +
-                         "Usually one planet with the surrounding area."
+                    Description = "Place in the universe or the multiverse characterized by connected set of culture or history." +
+                         "Usually one planet with the surrounding area.",
+                    CategoryType = cosmology
                 };
                 var river = new Model.Category
                 {
                     Name = "River",
-                    AddDesc = "A large natural stream of water flowing in a channel to the sea, a lake, or another river."
+                    Description = "A large natural stream of water flowing in a channel to the sea, a lake, or another river.",
+                    CategoryType = geography
                 };
                 var city = new Model.Category
                 {
                     Name = "City",
-                    AddDesc = "A built-up area with a name, defined boundaries, and local government, that is larger than a town and a village."
+                    Description = "A built-up area with a name, defined boundaries, and local government, that is larger than a town and a village.",
+                    CategoryType = geography
                 };
                 var person = new Model.Category
                 {
                     Name = "Person",
-                    AddDesc = "A conscious being regarded as an individual."
+                    Description = "A conscious being regarded as an individual.",
+                    CategoryType = beings
                 };
                 var race = new Model.Category
                 {
                     Name = "Race",
-                    AddDesc = "A group or set of beings or things with a common feature or features."
+                    Description = "A group or set of beings or things with a common feature or features.",
+                    CategoryType = beings
                 };
                 var country = new Model.Category
                 {
                     Name = "Country",
-                    AddDesc = "A nation with its own government, occupying a particular territory."
+                    Description = "A nation with its own government, occupying a particular territory.",
+                    CategoryType = geography
                 };
                 #endregion
 
@@ -98,6 +142,7 @@ namespace Worldbuilder.Models
                 var bricks = new[]
                 { sampleWorld, sampleContinent, cityState};
 
+               
 
                 var brickCats = new[]
                 {
@@ -115,6 +160,7 @@ namespace Worldbuilder.Models
                     new BrickToBrick{Brick = sampleContinent, Child = cityState}
                 };
 
+                context.CategoryTypes.AddRange(catTypes);
                 context.Categories.AddRange(categories);
                 context.Brick.AddRange(bricks);
                 context.BrickCategories.AddRange(brickCats);

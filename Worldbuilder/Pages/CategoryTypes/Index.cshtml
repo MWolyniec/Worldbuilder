@@ -1,0 +1,52 @@
+﻿@page
+@model Worldbuilder.Pages.CategoryTypes.IndexModel
+
+@{
+    ViewData["Title"] = "Category types";
+}
+
+<h1>Category types</h1>
+
+<p>
+    <a asp-page="Create">Create new category type</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryType[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryType[0].Categories)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CategoryType) {
+        <tr>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">
+                    @Html.DisplayFor(modelItem => item.Name)
+                    </a>
+            </td>
+            <td>
+                @foreach(var cat in item.Categories)
+                {
+                    <text>|</text>
+                <a asp-page="../Categories/Edit" asp-route-id="@cat.Id">
+                    @Html.DisplayFor(itemCategory => cat.Name)
+                    </a>
+                                    <text>| </text>
+
+                                    }
+
+</td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
