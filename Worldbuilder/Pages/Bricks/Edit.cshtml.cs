@@ -18,9 +18,7 @@ namespace Worldbuilder.Pages.Bricks
         public EditModel(Worldbuilder.Models.WorldbuilderContext context)
         {
             _context = context;
-            /*  _categorySelectionOrig = new int[1] { 0 };
-              _childrenSelectOrig = new int[1] { 0 };
-              _parentsSelectOrig = new int[1] { 0 };*/
+        
 
         }
 
@@ -96,14 +94,30 @@ namespace Worldbuilder.Pages.Bricks
             return Page();
         }
 
+        public async Task<IActionResult> OnPostToIndexAsync()
+        {
+            if (await CheckAndSave())
+            return RedirectToPage("./Index");
+            else return NotFound();
+        }
+
+
         public async Task<IActionResult> OnPostAsync()
+        {
+            if(await CheckAndSave())
+                return RedirectToPage("./Details", new { id = this.Brick.Id });
+            else return NotFound();
+        }
+
+
+        public async Task<bool> CheckAndSave()
         {
             if(!ModelState.IsValid)
             {
-                var err = ModelState.Select(x => x.Value.Errors)
+               var err = ModelState.Select(x => x.Value.Errors)
                            .Where(y => y.Count > 0)
                            .ToList();
-                return Page();
+                throw new Exception($"Model is invalid, ModelState has {err.Count} errors. Try turning the page off and on again.");
             }
 
 
@@ -131,15 +145,15 @@ namespace Worldbuilder.Pages.Bricks
             {
                 if(!BrickExists(Brick.Id))
                 {
-                    return NotFound();
+                    return false;
                 }
                 else
                 {
                     throw;
                 }
+                
             }
-
-            return RedirectToPage("./Index");
+            return true;
         }
 
         private bool BrickExists(int id)
