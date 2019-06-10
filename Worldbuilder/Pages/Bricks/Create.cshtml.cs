@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.Bricks
 {
@@ -19,7 +13,7 @@ namespace Worldbuilder.Pages.Bricks
         {
             _context = context;
         }
-        
+
         public async Task<IActionResult> OnGet()
         {
             return Page();
@@ -31,31 +25,42 @@ namespace Worldbuilder.Pages.Bricks
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+
+            if(await CheckAndSave())
+            {
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                return Page();
+            }
+        }
+
+        public async Task<IActionResult> OnPostImmediateEditAsync()
+        {
+            if(await CheckAndSave())
+            {
+                return RedirectToPage("./Edit", new { id = this.Brick.Id });
+            }
+            else
             {
                 return Page();
             }
             
-            _context.Brick.Add(Brick);
-            await _context.SaveChangesAsync();
-
-
-            return RedirectToPage("./Index");
         }
-        /*
-        public async Task<IActionResult> OnPostImmediateEditAsync()
+
+
+        public async Task<bool> CheckAndSave()
         {
             if(!ModelState.IsValid)
             {
-                return Page();
+                return false;
             }
 
             _context.Brick.Add(Brick);
             await _context.SaveChangesAsync();
+            return true;
 
-
-            return RedirectToPage("./Edit", new {id = this.Brick.Id});
-        }*/
-
+        }
     }
 }

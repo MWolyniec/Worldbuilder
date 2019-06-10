@@ -14,7 +14,7 @@ namespace Worldbuilder.Model
         public string Name { get; set; }
 
         [Display(Name = "Description"), DataType(DataType.MultilineText)]
-        public string AddDesc { get; set; }
+        public string Description { get; set; }
 
         public IList<BrickCategory> BrickCategories { get; set; }
 

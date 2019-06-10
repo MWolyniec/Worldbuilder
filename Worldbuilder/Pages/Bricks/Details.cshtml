@@ -27,8 +27,8 @@
                 {
                     <text>| </text>
                     <a asp-page="/Categories/Details" asp-route-id="@category.Category.Id">
-                    @Html.DisplayFor(modelItem => category.Category.Name)
-                        </a>
+                        @Html.DisplayFor(modelItem => category.Category.Name)
+                    </a>
                     <text> |</text>
                 }
             }
@@ -40,6 +40,25 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Brick.ShortDesc)
         </dd>
+
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Brick.Parents)
+        </dt>
+        <dd class="col-sm-10">
+            @if(Model.Brick.Parents != null)
+            {
+                @foreach(var parent in Model.Brick.Parents)
+                {
+                    <text> ></text>
+                    <a asp-page="./Edit" asp-route-id="@parent.Brick.Id">
+                        @Html.DisplayFor(modelItem => parent.Brick.Name)
+                    </a>
+                    <text>< | </text>
+                }
+            }
+        </dd>
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Brick.Children)
         </dt>
@@ -49,17 +68,17 @@
                 @foreach(var child in Model.Brick.Children)
                 {
                     <text> ></text>
-                        <a asp-page="./Edit" asp-route-id="@child.Child.Id">
-                            @Html.DisplayFor(modelItem => child.Child.Name)
-                         </a>
+                    <a asp-page="./Edit" asp-route-id="@child.Child.Id">
+                        @Html.DisplayFor(modelItem => child.Child.Name)
+                    </a>
                     <text>< | </text>
-                  }
-             }
+                }
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Brick.LongDesc)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10" style="white-space: pre-line;">
             @Html.DisplayFor(model => model.Brick.LongDesc)
         </dd>
     </dl>

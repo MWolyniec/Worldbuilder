@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Worldbuilder.Model;
 using Worldbuilder.Models;
 
-namespace Worldbuilder.Pages.Categories
+namespace Worldbuilder.Pages.CategoryTypes
 {
     public class IndexModel : PageModel
     {
@@ -19,12 +19,12 @@ namespace Worldbuilder.Pages.Categories
             _context = context;
         }
 
-        public IList<Category> Category { get;set; }
+        public IList<CategoryType> CategoryType { get;set; }
 
         public async Task OnGetAsync()
         {
-            Category = await _context.Categories
-                .Include(x => x.CategoryType)
+            CategoryType = await _context.CategoryTypes
+                .Include(x => x.Categories)
                 .ToListAsync();
         }
     }
