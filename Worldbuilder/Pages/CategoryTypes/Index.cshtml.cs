@@ -21,11 +21,20 @@ namespace Worldbuilder.Pages.CategoryTypes
 
         public IList<CategoryType> CategoryType { get;set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; }
+
         public async Task OnGetAsync()
         {
-            CategoryType = await _context.CategoryTypes
-                .Include(x => x.Categories)
-                .ToListAsync();
+            var catTypes = from m in _context.CategoryTypes
+                           select m;
+
+            if(!string.IsNullOrEmpty(SearchString))
+            {
+                catTypes = catTypes.Where(s => s.Name.Contains(SearchString));
+            }
+            
+            CategoryType = await catTypes.Include(x => x.Categories).ToListAsync();
         }
     }
 }

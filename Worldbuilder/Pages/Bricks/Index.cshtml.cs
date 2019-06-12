@@ -43,6 +43,8 @@ namespace Worldbuilder.Pages.Bricks
             var catTypesGroups = await _context.CategoryTypes.Select(x => new SelectListGroup { Name = x.Name }).ToListAsync();
 
             Categories = await _context.Categories
+                .OrderBy(o => o.CategoryType.Name)
+                .ThenBy(t => t.Name)
                 .Select
                 (x => 
                 new SelectListItem {
@@ -52,11 +54,7 @@ namespace Worldbuilder.Pages.Bricks
                     }
                 )
                 .ToListAsync();    
-
-
-
-          
-
+            
             var bricks = from m in _context.Brick
                          select m;
             if(!string.IsNullOrEmpty(SearchString))

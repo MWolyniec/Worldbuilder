@@ -10,6 +10,15 @@
 <p>
     <a asp-page="Create">Create new category</a> | <a asp-page="../CategoryTypes/Create">Create new category type</a> | <a asp-page="../CategoryTypes/Index">View category types</a>
 </p>
+<form>
+    <p>
+        <select asp-for="CategoryType" asp-items="Model.CategoryTypes">
+            <option value="">All</option>
+        </select>
+        Look for: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
