@@ -2,16 +2,21 @@
 @model Worldbuilder.Pages.Bricks.DetailsModel
 
 @{
-    ViewData["Title"] = @Html.DisplayFor(model => model.Brick.Name);
+    ViewData["Title"] = "Details";
 }
 
-<h1>@Html.DisplayFor(model => model.Brick.Name)</h1>
+<h1>Details</h1>
 
 <div>
     <h4>Brick</h4>
     <hr />
     <dl class="row">
-      
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Brick.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Brick.Name)
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Brick.BrickCategories)
         </dt>

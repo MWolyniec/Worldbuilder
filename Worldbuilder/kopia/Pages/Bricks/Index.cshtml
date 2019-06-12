@@ -32,7 +32,7 @@
 @foreach (var item in Model.Brick) {
         <tr>
             <td style="text-align:left;">
-                <a asp-page="./Details" asp-route-id="@item.Id">
+                <a asp-page="./Edit" asp-route-id="@item.Id">
                     @Html.DisplayFor(modelItem => item.Name)
                 </a>
             </td>
@@ -45,26 +45,15 @@
                     foreach(var category in item.BrickCategories)
                     {
                         <text>| </text>
-                        <a asp-page="/Categories/Details" asp-route-id="@item.Id">
-                            @Html.DisplayFor(modelItem => category.Category.Name)
-                            </a>
-                            <text> |</text>
-                            }
-                            }
-                    </td>
-            <td>
-                @if(item.Children != null)
-                {
-                    foreach(var child in item.Children)
-                    {
-                        <text> ></text>
-                        <a asp-page="./Details" asp-route-id="@child.Child.Id">
-                            @Html.DisplayFor(modelItem => child.Child.Name)
-                        </a>
-                        <text>< |</text>
+                        @Html.DisplayFor(modelItem => category.Category.Name)
+                        <text> |</text>
                     }
                 }
-                </td>
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.Children.Count)
+                 
+            </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |

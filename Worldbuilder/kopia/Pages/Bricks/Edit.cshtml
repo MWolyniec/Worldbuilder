@@ -1,0 +1,125 @@
+﻿@page "{id:int}"
+@model Worldbuilder.Pages.Bricks.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Brick</h4>
+<hr />
+<div class="container-fluid">
+    <div class="row">
+        <form method="post">
+            <div class="col-lg-12">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Brick.Id" />
+                <input type="hidden" asp-for="Brick.BrickCategories" />
+                <input type="hidden" asp-for="Brick.Children" />
+                <input type="hidden" asp-for="Brick.Parents" />
+                <div class="form-group">
+                    <label asp-for="Brick.Name" class="control-label"></label>
+                    <br />
+                    <span asp-validation-for="Brick.Name" class="text-danger"></span>
+                    <input asp-for="Brick.Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Brick.BrickCategories" class="control-label"></label>
+                    <br />
+                    @if(Model.Brick.BrickCategories != null)
+                    {
+                        @foreach(var category in Model.Brick.BrickCategories)
+                        {
+                            <text>| </text>
+                            <a asp-page="/Categories/Details" asp-route-id="@category.Category.Id">
+                                @Html.DisplayFor(modelItem => category.Category.Name, new { style = "color:red" })
+                            </a>
+                            <text> |</text>
+                        }
+                    }
+                    <br />
+                    <select asp-for="CategorySelect" asp-items="Model.Categories" class="form-control"></select>
+                    <small class="form-text text-muted">You can choose more than one category by holding ctrl and clicking additional positions on the list.</small>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Brick.ShortDesc" class="control-label"></label>
+                    <br />
+                    <span asp-validation-for="Brick.ShortDesc" class="text-danger"></span>
+                    <input asp-for="Brick.ShortDesc" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Brick.LongDesc" class="control-label"></label>
+                    <br />
+                    <span asp-validation-for="Brick.LongDesc" class="text-danger"></span>
+                    <textarea asp-for="Brick.LongDesc" class="form-control" rows="18" cols="200"></textarea>
+                </div>
+
+
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label asp-for="Brick.Parents" class="control-label"></label>
+                    <br />
+                    @if(Model.Brick.Parents != null)
+                    {
+                        @foreach(var parent in Model.Brick.Parents)
+                        {
+                            <text> ></text>
+                            <a asp-page="./Details" asp-route-id="@parent.Brick.Id">
+                                @Html.DisplayFor(modelItem => parent.Brick.Name, new { style = "color:red" })
+                            </a>
+                            <text>< |</text>
+                        }
+                    }
+                    <br />
+                    <select asp-for="ParentsSelect" asp-items="Model.Parents" class="form-control" rows="20"></select>
+                    <small class="form-text text-muted">You can choose more than one parent brick by holding ctrl and clicking additional positions on the list.</small>
+
+
+                </div>
+                <div class="form-group">
+                    <label asp-for="Brick.Children" class="control-label"></label>
+                    <br />
+                    @if(Model.Brick.Children != null)
+                    {
+                        @foreach(var child in Model.Brick.Children)
+                        {
+                            <text> ></text>
+                            <a asp-page="./Edit" asp-route-id="@child.Child.Id">
+                                @Html.DisplayFor(modelItem => child.Child.Name, new { style = "color:red" })
+                            </a>
+                            <text>< |</text>
+                        }
+                    }
+                    <br />
+                    <select asp-for="ChildrenSelect" asp-items="Model.Children" class="form-control" rows="20"></select>
+                    <small class="form-text text-muted">You can choose more than one child brick by holding ctrl and clicking additional positions on the list.</small>
+
+
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                    <text> &nbsp; </text>
+                    <div class="form-group">
+                        <input type="submit" value="Save & To Index" asp-page-handler="ToIndex" class="btn btn-primary" />
+                    </div>
+                </div>
+                </div>
+
+</form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

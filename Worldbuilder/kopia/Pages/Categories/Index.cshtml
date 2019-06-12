@@ -37,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                <a asp-page="/CategoryTypes/Details" asp-route-id="@item.Id">
+                <a asp-page="../CategoryType/Details" asp-route-id="@item.Id">
                     @Html.DisplayFor(modelItem => item.CategoryType.Name)
                 </a>
             </td>
