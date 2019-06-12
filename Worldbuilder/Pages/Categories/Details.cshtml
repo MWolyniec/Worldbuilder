@@ -2,7 +2,7 @@
 @model Worldbuilder.Pages.Categories.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = @Html.DisplayFor(model => model.Category.Name);
 }
 
 <h1>@Html.DisplayFor(model => model.Category.Name)</h1>
