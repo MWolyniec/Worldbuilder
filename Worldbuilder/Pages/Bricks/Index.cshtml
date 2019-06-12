@@ -10,6 +10,17 @@
 <p>
     <a asp-page="Create">Create new</a> | <a asp-page="../Categories/Create">Create new category</a> | <a asp-page="../Categories/Index">View categories</a>
 </p>
+
+<form>
+    <p>
+        <select asp-for="BrickCategory" asp-items="Model.Categories">
+            <option value="">All</option>
+        </select>
+        Look for: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
 <table class="table" style="text-align:center;">
     <thead>
         <tr>
