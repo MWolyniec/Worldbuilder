@@ -21,11 +21,15 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryType[0].Name)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
+                    @Html.DisplayNameFor(model => model.CategoryType[0].Name)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryType[0].Categories)
-            </th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.CategorySort">
+                    @Html.DisplayNameFor(model => model.CategoryType[0].Categories)
+            </a>
+                    </th>
             <th></th>
         </tr>
     </thead>

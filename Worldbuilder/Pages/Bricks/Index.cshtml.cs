@@ -20,9 +20,19 @@ namespace Worldbuilder.Pages.Bricks
             _context = context;
         }
 
-        public IList<Brick> Brick { get; set; }
+        public PaginatedList<Brick> Brick { get; set; }
         public IList<BrickCategory> BrickCategories { get; set; }
-        
+
+
+        #region Sort
+
+        public string NameSort { get; set; }
+        public string CategorySort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
+
+
+        #endregion
 
         #region Search
         [BindProperty(SupportsGet = true)]
@@ -33,13 +43,30 @@ namespace Worldbuilder.Pages.Bricks
         public string BrickCategory { get; set; }
         #endregion
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder,
+    string currentFilter, string searchString, int? pageIndex)
         {
-            BrickCategories = await _context.BrickCategories
-                .Include(d => d.Category)
-                .ToListAsync();
+            CurrentSort = sortOrder;
 
-            
+            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            CategorySort = sortOrder == "Category" ? "category_desc" : "Category";
+
+            if(searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
+
+            var brickCategories = from d in _context.BrickCategories
+                         select d;
+
+
+
             var catTypesGroups = await _context.CategoryTypes.Select(x => new SelectListGroup { Name = x.Name }).ToListAsync();
 
             Categories = await _context.Categories
@@ -68,12 +95,35 @@ namespace Worldbuilder.Pages.Bricks
                     .Where
                     (
                     x => x.BrickCategories.Any(b => b.CategoryId == Convert.ToInt32(BrickCategory))
-                    
                     );
             }
 
-            Brick = await bricks
-                .ToListAsync();
+            
+            switch(sortOrder)
+            {
+                case "name_desc":
+                    bricks = bricks.OrderByDescending(s => s.Name);
+                    break;
+                case "Category":
+                    bricks = bricks.OrderBy(s => s.BrickCategories.OrderBy(bc => bc.Category.Name).FirstOrDefault().Category.Name);
+                    brickCategories = brickCategories.OrderBy(x => x.Category.Name);
+                    break;
+                case "category_desc":
+                    bricks = bricks.OrderByDescending(s => s.BrickCategories.OrderBy(bc => bc.Category.Name).LastOrDefault().Category.Name);
+                    brickCategories = brickCategories.OrderByDescending(x => x.Category.Name);
+                    break;
+                default:
+                    bricks = bricks.OrderBy(s => s.Name);
+                    break;
+            }
+
+
+            int pageSize = 10;
+            Brick = await PaginatedList<Brick>.CreateAsync(
+                bricks.Include(c => c.Children).ThenInclude(ch => ch.Child).Include(p => p.Parents).ThenInclude(pa => pa.Brick).AsNoTracking(),
+                pageIndex ?? 1, pageSize);
+            
+            BrickCategories = await brickCategories.Include(d => d.Category).ToListAsync();
 
 
         }

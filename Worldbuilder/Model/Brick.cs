@@ -23,7 +23,7 @@ namespace Worldbuilder.Model
         [Display(Name = "Description"), DataType(DataType.MultilineText)]
         public string LongDesc { get; set; }
 
-       //[Display(Name = "Contains")]
+       
         public IList<BrickToBrick> Children { get; set; }
         public IList<BrickToBrick> Parents { get; set; }
 
