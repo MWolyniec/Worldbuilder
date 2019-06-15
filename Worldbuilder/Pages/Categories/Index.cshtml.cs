@@ -20,8 +20,18 @@ namespace Worldbuilder.Pages.Categories
             _context = context;
         }
 
-        public IList<Category> Category { get;set; }
+        public PaginatedList<Category> Categories { get;set; }
         
+        #region Sort
+
+        public string NameSort { get; set; }
+        public string TypeSort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
+
+
+        #endregion
+
         #region Search
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
@@ -31,8 +41,26 @@ namespace Worldbuilder.Pages.Categories
         public string CategoryType { get; set; }
         #endregion
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder,
+    string currentFilter, string searchString, int? pageIndex)
         {
+            CurrentSort = sortOrder;
+
+            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            TypeSort = sortOrder == "Type" ? "type_desc" : "Type";
+
+            if(searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
+
+
             CategoryTypes = await _context.CategoryTypes
                 .OrderBy(o => o.Name)
                 .Select
@@ -63,7 +91,30 @@ namespace Worldbuilder.Pages.Categories
                     );
             }
 
-            Category = await categories.ToListAsync();
+            
+
+            switch(sortOrder)
+            {
+                case "name_desc":
+                    categories = categories.OrderByDescending(s => s.Name);
+                    break;
+                case "Type":
+                    categories = categories.OrderBy(s => s.CategoryType.Name);
+                    break;
+                case "type_desc":
+                    categories = categories.OrderByDescending(s => s.CategoryType.Name);
+                    break;
+                default:
+                    categories = categories.OrderBy(s => s.Name);
+                    break;
+            }
+
+            int pageSize = 10;
+            Categories = await PaginatedList<Category>.CreateAsync(
+                categories.Include(x => x.CategoryType).AsNoTracking(),
+                pageIndex ?? 1, pageSize);
+
+           
         }
     }
 }
