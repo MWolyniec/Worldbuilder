@@ -28,9 +28,9 @@
                 <div class="form-group">
                     <label asp-for="Brick.BrickCategories" class="control-label"></label>
                     <br />
-                    @if(Model.Brick.BrickCategories != null)
+                    @if (Model.Brick.BrickCategories != null)
                     {
-                        @foreach(var category in Model.Brick.BrickCategories)
+                        @foreach (var category in Model.Brick.BrickCategories)
                         {
                             <text>| </text>
                             <a asp-page="/Categories/Details" asp-route-id="@category.Category.Id">
@@ -64,15 +64,15 @@
                 <div class="form-group">
                     <label asp-for="Brick.Parents" class="control-label"></label>
                     <br />
-                    @if(Model.Brick.Parents != null)
+                    @if (Model.Brick.Parents != null)
                     {
-                        @foreach(var parent in Model.Brick.Parents)
+                        @foreach (var parent in Model.Brick.Parents)
                         {
                             <text> ></text>
                             <a asp-page="./Details" asp-route-id="@parent.Brick.Id">
                                 @Html.DisplayFor(modelItem => parent.Brick.Name, new { style = "color:red" })
                             </a>
-                            <text>< |</text>
+                            <text>&lt; |</text>
                         }
                     }
                     <br />
@@ -84,15 +84,15 @@
                 <div class="form-group">
                     <label asp-for="Brick.Children" class="control-label"></label>
                     <br />
-                    @if(Model.Brick.Children != null)
+                    @if (Model.Brick.Children != null)
                     {
-                        @foreach(var child in Model.Brick.Children)
+                        @foreach (var child in Model.Brick.Children)
                         {
                             <text> ></text>
                             <a asp-page="./Edit" asp-route-id="@child.Child.Id">
                                 @Html.DisplayFor(modelItem => child.Child.Name, new { style = "color:red" })
                             </a>
-                            <text>< |</text>
+                            <text>&lt; |</text>
                         }
                     }
                     <br />
@@ -110,9 +110,9 @@
                         <input type="submit" value="Save & To Index" asp-page-handler="ToIndex" class="btn btn-primary" />
                     </div>
                 </div>
-                </div>
+            </div>
 
-</form>
+        </form>
     </div>
 </div>
 

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.Bricks
 {
@@ -33,6 +30,7 @@ namespace Worldbuilder.Pages.Bricks
 
             ChildrenJoinTable = await _context.BrickToBrick
                 .Include(z => z.Child)
+                .Include(d => d.Brick)
                 .ToListAsync();
 
             BrickCategories = await _context.BrickCategories

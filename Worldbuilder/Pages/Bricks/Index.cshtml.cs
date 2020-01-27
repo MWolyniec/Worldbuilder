@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.Bricks
 {
@@ -51,7 +50,7 @@ namespace Worldbuilder.Pages.Bricks
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             CategorySort = sortOrder == "Category" ? "category_desc" : "Category";
 
-            if(searchString != null)
+            if (searchString != null)
             {
                 pageIndex = 1;
             }
@@ -63,33 +62,56 @@ namespace Worldbuilder.Pages.Bricks
             CurrentFilter = searchString;
 
             var brickCategories = from d in _context.BrickCategories
-                         select d;
+                                  select d;
 
 
 
             var catTypesGroups = await _context.CategoryTypes.Select(x => new SelectListGroup { Name = x.Name }).ToListAsync();
 
-            Categories = await _context.Categories
+            var orderedCategories = await _context.Categories
+                .Include(x => x.CategoryType)
                 .OrderBy(o => o.CategoryType.Name)
                 .ThenBy(t => t.Name)
+                .ToListAsync();
+            /*
                 .Select
-                (x => 
-                new SelectListItem {
+                (x =>
+                new SelectListItem
+                {
                     Value = x.Id.ToString(),
                     Text = x.Name,
                     Group = catTypesGroups.First(d => d.Name.Equals(x.CategoryType.Name))
-                    }
-                )
-                .ToListAsync();    
-            
-            var bricks = from m in _context.Brick
-                         select m;
-            if(!string.IsNullOrEmpty(SearchString))
+                }
+                ).ToListAsync();*/
+
+            Categories = new List<SelectListItem>();
+            foreach (var category in orderedCategories)
+            {
+                var newSLItem = (new SelectListItem()
+                {
+                    Value = category.Id.ToString(),
+                    Text = category.Name
+                });
+                if (category.CategoryType != null)
+                    if (category.CategoryType.Name != null)
+                        newSLItem.Group = catTypesGroups.FirstOrDefault(d => d.Name.Equals(category.CategoryType.Name));
+
+                Categories.Add(newSLItem);
+            }
+            BrickCategories = await brickCategories.Include(d => d.Brick).Include(d => d.Category).ToListAsync();
+
+
+            var bricks = _context.Brick
+                .Include(d => d.BrickCategories)
+                .ThenInclude(b => b.Category)
+                .Select(m => m);
+
+            if (!string.IsNullOrEmpty(SearchString))
             {
                 bricks = bricks.Where(s => s.Name.Contains(SearchString));
             }
 
-            if(!string.IsNullOrEmpty(BrickCategory))
+            if (!string.IsNullOrEmpty(BrickCategory))
             {
                 bricks = bricks
                     .Where
@@ -98,8 +120,8 @@ namespace Worldbuilder.Pages.Bricks
                     );
             }
 
-            
-            switch(sortOrder)
+
+            switch (sortOrder)
             {
                 case "name_desc":
                     bricks = bricks.OrderByDescending(s => s.Name);
@@ -122,8 +144,8 @@ namespace Worldbuilder.Pages.Bricks
             Brick = await PaginatedList<Brick>.CreateAsync(
                 bricks.Include(c => c.Children).ThenInclude(ch => ch.Child).Include(p => p.Parents).ThenInclude(pa => pa.Brick).AsNoTracking(),
                 pageIndex ?? 1, pageSize);
-            
-            BrickCategories = await brickCategories.Include(d => d.Category).ToListAsync();
+
+
 
 
         }

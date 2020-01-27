@@ -11,14 +11,14 @@
     <h4>Brick</h4>
     <hr />
     <dl class="row">
-      
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Brick.BrickCategories)
         </dt>
         <dd class="col-sm-10">
-            @if(Model.Brick.BrickCategories != null)
+            @if (Model.Brick.BrickCategories != null)
             {
-                @foreach(var category in Model.Brick.BrickCategories)
+                @foreach (var category in Model.Brick.BrickCategories)
                 {
                     <text>| </text>
                     <a asp-page="/Categories/Details" asp-route-id="@category.Category.Id">
@@ -41,15 +41,15 @@
             @Html.DisplayNameFor(model => model.Brick.Parents)
         </dt>
         <dd class="col-sm-10">
-            @if(Model.Brick.Parents != null)
+            @if (Model.Brick.Parents != null)
             {
-                @foreach(var parent in Model.Brick.Parents)
+                @foreach (var parent in Model.Brick.Parents)
                 {
                     <text> ></text>
                     <a asp-page="./Details" asp-route-id="@parent.Brick.Id">
                         @Html.DisplayFor(modelItem => parent.Brick.Name)
                     </a>
-                    <text>< | </text>
+                    <text>&lt; | </text>
                 }
             }
         </dd>
@@ -58,15 +58,15 @@
             @Html.DisplayNameFor(model => model.Brick.Children)
         </dt>
         <dd class="col-sm-10">
-            @if(Model.Brick.Children != null)
+            @if (Model.Brick.Children != null)
             {
-                @foreach(var child in Model.Brick.Children)
+                @foreach (var child in Model.Brick.Children)
                 {
                     <text> ></text>
                     <a asp-page="./Details" asp-route-id="@child.Child.Id">
                         @Html.DisplayFor(modelItem => child.Child.Name)
                     </a>
-                    <text>< | </text>
+                    <text>&lt; | </text>
                 }
             }
         </dd>
@@ -80,5 +80,6 @@
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Brick.Id">Edit</a> |
+    <a asp-page="./Delete" asp-route-id="@Model.Brick.Id">Delete</a> |
     <a asp-page="./Index">Back to List</a>
 </div>

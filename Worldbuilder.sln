@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worldbuilder", "Worldbuilder\Worldbuilder.csproj", "{97F95016-418F-4138-8A88-1C6626B32595}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestSuite", "NUnitTestSuite\NUnitTestSuite.csproj", "{DFFE02DB-B08F-4DCA-B90A-0EEE8DE89AEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worldbuilder.Tests", "Worldbuilder.Tests\Worldbuilder.Tests.csproj", "{E9572A47-0DAF-442A-8C6E-776BE44F323A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{97F95016-418F-4138-8A88-1C6626B32595}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97F95016-418F-4138-8A88-1C6626B32595}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97F95016-418F-4138-8A88-1C6626B32595}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFFE02DB-B08F-4DCA-B90A-0EEE8DE89AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFFE02DB-B08F-4DCA-B90A-0EEE8DE89AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFFE02DB-B08F-4DCA-B90A-0EEE8DE89AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFFE02DB-B08F-4DCA-B90A-0EEE8DE89AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9572A47-0DAF-442A-8C6E-776BE44F323A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9572A47-0DAF-442A-8C6E-776BE44F323A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9572A47-0DAF-442A-8C6E-776BE44F323A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9572A47-0DAF-442A-8C6E-776BE44F323A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

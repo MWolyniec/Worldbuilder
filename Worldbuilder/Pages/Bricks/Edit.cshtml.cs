@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.Bricks
 {
@@ -18,7 +17,7 @@ namespace Worldbuilder.Pages.Bricks
         public EditModel(Worldbuilder.Models.WorldbuilderContext context)
         {
             _context = context;
-        
+
 
         }
 
@@ -33,9 +32,9 @@ namespace Worldbuilder.Pages.Bricks
 
         [BindProperty]
         public int[] ParentsSelect { get; set; }
-        
 
- 
+
+
 
         private int[] categorySelectionOrig;
         private int[] childrenSelectOrig;
@@ -53,7 +52,7 @@ namespace Worldbuilder.Pages.Bricks
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -67,7 +66,7 @@ namespace Worldbuilder.Pages.Bricks
                 .FirstOrDefaultAsync(m => m.Id == id);
 
 
-            if(Brick == null)
+            if (Brick == null)
             {
                 return NotFound();
             }
@@ -96,42 +95,38 @@ namespace Worldbuilder.Pages.Bricks
 
         public async Task<IActionResult> OnPostToIndexAsync()
         {
-            if (await CheckAndSave())
-            return RedirectToPage("./Index");
+            if (await CheckAndSaveChanges())
+                return RedirectToPage("./Index");
             else return NotFound();
         }
 
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if(await CheckAndSave())
+            if (await CheckAndSaveChanges())
                 return RedirectToPage("./Details", new { id = this.Brick.Id });
             else return NotFound();
         }
 
 
-        public async Task<bool> CheckAndSave()
+        public async Task<bool> CheckAndSaveChanges()
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-               var err = ModelState.Select(x => x.Value.Errors)
-                           .Where(y => y.Count > 0)
-                           .ToList();
+                var err = ModelState.Select(x => x.Value.Errors)
+                            .Where(y => y.Count > 0)
+                            .ToList();
                 throw new Exception($"Model is invalid, ModelState has {err.Count} errors. Try turning the page off and on again.");
             }
 
-
-
             TempData.CorrectEmptyArrays<int>();
 
-            await _context.BrickCategories.UpdateFromSelectList
-                (Brick, TempData[nameof(categorySelectionOrig)] as int[], CategorySelect);
 
-            await _context.BrickToBrick.UpdateFromSelectList
-                (Brick, TempData[nameof(childrenSelectOrig)] as int[], ChildrenSelect);
+            UpdateJoinTableFromSelectList.Update(_context.BrickCategories, Brick, TempData[nameof(categorySelectionOrig)] as int[], CategorySelect);
 
-            await _context.BrickToBrick.UpdateFromSelectList
-                (Brick, TempData[nameof(parentsSelectOrig)] as int[], ParentsSelect, Relationship.Reversed);
+            UpdateJoinTableFromSelectList.Update(_context.BrickToBrick, Brick, TempData[nameof(childrenSelectOrig)] as int[], ChildrenSelect);
+
+            UpdateJoinTableFromSelectList.Update(_context.BrickToBrick, Brick, TempData[nameof(parentsSelectOrig)] as int[], ParentsSelect, Relationship.Reversed);
 
             TempData.Clear();
 
@@ -141,9 +136,9 @@ namespace Worldbuilder.Pages.Bricks
             {
                 await _context.SaveChangesAsync();
             }
-            catch(DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException)
             {
-                if(!BrickExists(Brick.Id))
+                if (!BrickExists(Brick.Id))
                 {
                     return false;
                 }
@@ -151,7 +146,7 @@ namespace Worldbuilder.Pages.Bricks
                 {
                     throw;
                 }
-                
+
             }
             return true;
         }
