@@ -9,5 +9,9 @@ namespace Worldbuilder.Model.BaseClasses
         [StringLength(50), Required]
         public string Name { get; set; }
 
+        public IdName(string name)
+        {
+            Name = name;
+        }
     }
 }

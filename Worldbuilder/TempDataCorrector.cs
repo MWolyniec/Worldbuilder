@@ -32,6 +32,7 @@ namespace Worldbuilder
             tempData.Keep();
             
         }
+        //TODO:Do wyjebania kod nie moze lezec zakomentowany
         /*
         public static Dictionary<string, T> CorrectAndCopyTempDataToDictionary<T>(ITempDataDictionary tempData)
         {

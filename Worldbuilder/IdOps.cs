@@ -4,11 +4,12 @@ using System.Reflection;
 
 namespace Worldbuilder
 {
+    //TODO:Do osobnej klasy  Zamiast own uzyj "self", bledna nazwa enua powinien sie nazywacjakoś tak :  ForeginKeySource
     public enum IdOptions { Own, Objects, Related }
 
     public static class IdOps
     {
-
+        //TODO:Do wyjebania puste linie
 
         /// <summary>
         /// Checks if a property is the id of the given type.
@@ -20,23 +21,34 @@ namespace Worldbuilder
         /// <returns></returns>
         public static bool IsId(this PropertyInfo p, Type type, IdOptions idOption)
         {
-            bool withId = p.Name.EndsWith("Id");
+            //TODO:Wszstkie zmienne po lewej stronie zonaczamy jako var w tym przypadku var withID          
+            bool withId = p.Name.EndsWith("Id"); //TODO:Do  string do consta
 
             switch (idOption)
             {
                 case IdOptions.Own:
+
                     return withId
-                        && ((p.Name.StartsWith(type.Name) && p.Name.Length == 2 + type.Name.Length) || (p.Name.Length == 2))
-                        && (p.DeclaringType.Equals(type) || p.DeclaringType.IsAssignableFrom(type));
+                        //TODO:Do  2 + type.Name.Length do zmiennej 
+                        && ((p.Name.StartsWith(type.Name) 
+                        && p.Name.Length == 2 + type.Name.Length)
+                        || (p.Name.Length == 2))
+                        && (p.DeclaringType.Equals(type) 
+                        || p.DeclaringType.IsAssignableFrom(type));
+
                 case IdOptions.Objects:
+
                     return withId
                         && p.Name.StartsWith(type.Name)
                         && p.Name.Length == 2 + type.Name.Length
                         && !p.DeclaringType.Equals(type);
+
                 case IdOptions.Related:
+
                     return withId
                         && !p.Name.StartsWith(type.Name)
                         && !p.DeclaringType.Equals(type);
+
                 default:
                     throw new ArgumentException("Parameter 'idOption' is not set correctly");
             }

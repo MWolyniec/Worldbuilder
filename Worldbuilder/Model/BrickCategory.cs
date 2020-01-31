@@ -10,9 +10,7 @@ namespace Worldbuilder.Model
     {
         public int BrickId { get; set; }
         public Brick Brick { get; set; }
-
-        public int CategoryId { get; set; }
-        
+        public int CategoryId { get; set; }        
         public Category Category { get; set; }
     }
 }

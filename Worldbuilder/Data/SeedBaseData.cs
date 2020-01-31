@@ -66,7 +66,14 @@ namespace Worldbuilder.Models
 
                 #endregion
 
-                var catTypes = new[] { geography, beliefs, cosmology, biology, something, beings, itemsOfCommonUse, technology, roleInSociety, astronomy };
+                // TODO : Dlaczego typ tablicowy a nie lista ? i Wszystkie kategorie powinny byc const string[]
+                //, do tego jedna pętla ktora je uzupełnia
+                // To jest tylko małe PoC:
+                var cateTypes = new CategoryTypeBuilder().Build(InitialData.CategoryType);
+
+
+                var catTypes = new[] { new CategoryType(){Name = "geography"}
+                    , beliefs, cosmology, biology, something, beings, itemsOfCommonUse, technology, roleInSociety, astronomy };
 
                 #region Categories
                 var ocean = new Model.Category
