@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.Bricks
 {
@@ -29,7 +25,7 @@ namespace Worldbuilder.Pages.Bricks
                 return NotFound();
             }
 
-            Brick = await _context.Brick.FirstOrDefaultAsync(m => m.Id == id);
+            Brick = await _context.Bricks.FirstOrDefaultAsync(m => m.Id == id);
 
             if (Brick == null)
             {
@@ -45,11 +41,27 @@ namespace Worldbuilder.Pages.Bricks
                 return NotFound();
             }
 
-            Brick = await _context.Brick.FindAsync(id);
+            Brick = await _context.Bricks.FindAsync(id);
 
             if (Brick != null)
             {
-                _context.Brick.Remove(Brick);
+
+
+                foreach (var joinTable in _context.BrickToBrick)
+                {
+                    if (joinTable.BrickId == this.Brick.Id || joinTable.ChildId == this.Brick.Id)
+                        _context.BrickToBrick.Remove(joinTable);
+                }
+
+
+                foreach (var joinTable in _context.BrickCategories)
+                {
+                    if (joinTable.BrickId == this.Brick.Id)
+                        _context.BrickCategories.Remove(joinTable);
+                }
+
+
+                _context.Bricks.Remove(Brick);
                 await _context.SaveChangesAsync();
             }
 

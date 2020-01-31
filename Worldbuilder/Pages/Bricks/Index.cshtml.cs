@@ -101,7 +101,7 @@ namespace Worldbuilder.Pages.Bricks
             BrickCategories = await brickCategories.Include(d => d.Brick).Include(d => d.Category).ToListAsync();
 
 
-            var bricks = _context.Brick
+            var bricks = _context.Bricks
                 .Include(d => d.BrickCategories)
                 .ThenInclude(b => b.Category)
                 .Select(m => m);

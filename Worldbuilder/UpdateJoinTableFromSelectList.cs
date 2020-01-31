@@ -52,17 +52,7 @@ namespace Worldbuilder
                 {
                     removedRelationsIndexes = originalSelection.Where(x => !newSelection.Contains(x));
 
-                    foreach (int selectedId in newSelection)
-                    {
-                        if (!originalSelection.Contains(selectedId))
-                        {
-                            TJoinTableObject newRelation = new TJoinTableObject();
-                            objectsIdAsFK.SetValue(newRelation, currentId);
-                            relatedIdAsFK.SetValue(newRelation, selectedId);
 
-                            joinTable.Add(newRelation);
-                        }
-                    }
                 }
                 else
                 {
@@ -86,7 +76,30 @@ namespace Worldbuilder
                     //if (itemToRemove != null) joinTable.Remove(itemToRemove);
                 }
             }
+            originalSelection ??= Array.Empty<int>();
+            foreach (int selectedId in newSelection)
+            {
+                if (!originalSelection.Contains(selectedId))
+                {
+                    TJoinTableObject newRelation = new TJoinTableObject();
+                    objectsIdAsFK.SetValue(newRelation, currentId);
+                    relatedIdAsFK.SetValue(newRelation, selectedId);
 
+                    bool sameJoinTableObjectAlreadyExists = false;
+                    foreach (var joinTableObject in joinTable)
+                    {
+                        if (((int)objectsIdAsFK.GetValue(joinTableObject) == currentId && (int)relatedIdAsFK.GetValue(joinTableObject) == currentId)
+                             || ((int)relatedIdAsFK.GetValue(joinTableObject) == currentId && (int)objectsIdAsFK.GetValue(joinTableObject) == currentId))
+                        {
+                            sameJoinTableObjectAlreadyExists = true;
+                        }
+
+
+                    }
+
+                    if (!sameJoinTableObjectAlreadyExists) joinTable.Add(newRelation);
+                }
+            }
 
         }
     }

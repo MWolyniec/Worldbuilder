@@ -37,7 +37,7 @@ namespace Worldbuilder.Pages.Bricks
                 .Include(d => d.Category)
                 .ToListAsync();
 
-            Brick = await _context.Brick
+            Brick = await _context.Bricks
                 .Include(c => c.BrickCategories)
                 .Include(p => p.Children).
                 FirstOrDefaultAsync(m => m.Id == id);

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.Categories
 {
@@ -20,8 +19,8 @@ namespace Worldbuilder.Pages.Categories
             _context = context;
         }
 
-        public PaginatedList<Category> Categories { get;set; }
-        
+        public PaginatedList<Category> Categories { get; set; }
+
         #region Sort
 
         public string NameSort { get; set; }
@@ -35,10 +34,10 @@ namespace Worldbuilder.Pages.Categories
         #region Search
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
-        public List<SelectListItem> CategoryTypes { get; set; }
+        public List<SelectListItem> CategoryTypesAsSelectList { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string CategoryType { get; set; }
+        public string CategoryTypeAsString { get; set; }
         #endregion
 
         public async Task OnGetAsync(string sortOrder,
@@ -49,7 +48,7 @@ namespace Worldbuilder.Pages.Categories
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             TypeSort = sortOrder == "Type" ? "type_desc" : "Type";
 
-            if(searchString != null)
+            if (searchString != null)
             {
                 pageIndex = 1;
             }
@@ -61,7 +60,7 @@ namespace Worldbuilder.Pages.Categories
             CurrentFilter = searchString;
 
 
-            CategoryTypes = await _context.CategoryTypes
+            CategoryTypesAsSelectList = await _context.CategoryTypes
                 .OrderBy(o => o.Name)
                 .Select
                 (x =>
@@ -74,26 +73,25 @@ namespace Worldbuilder.Pages.Categories
                 .ToListAsync();
 
 
-            var categories = from m in _context.Categories
-                         select m;
+            var categories = _context.Categories.Select(x => x);
 
-            if(!string.IsNullOrEmpty(SearchString))
+            if (!string.IsNullOrEmpty(SearchString))
             {
                 categories = categories.Where(s => s.Name.Contains(SearchString));
             }
 
-            if(!string.IsNullOrEmpty(CategoryType))
+            if (!string.IsNullOrEmpty(CategoryTypeAsString))
             {
                 categories = categories
                     .Where
                     (
-                    x => x.CategoryType.Id == Convert.ToInt32(CategoryType)
+                    x => x.CategoryType.Id == Convert.ToInt32(CategoryTypeAsString)
                     );
             }
 
-            
 
-            switch(sortOrder)
+
+            switch (sortOrder)
             {
                 case "name_desc":
                     categories = categories.OrderByDescending(s => s.Name);
@@ -111,10 +109,10 @@ namespace Worldbuilder.Pages.Categories
 
             int pageSize = 10;
             Categories = await PaginatedList<Category>.CreateAsync(
-                categories.Include(x => x.CategoryType).AsNoTracking(),
+                categories,
                 pageIndex ?? 1, pageSize);
 
-           
+
         }
     }
 }

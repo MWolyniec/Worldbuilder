@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.CategoryTypes
 {
@@ -49,6 +46,15 @@ namespace Worldbuilder.Pages.CategoryTypes
 
             if (CategoryType != null)
             {
+
+                var categoriesToClean = _context.Categories.Where(cat => cat.CategoryType.Equals(this.CategoryType)).AsEnumerable();
+
+
+                foreach (var category in categoriesToClean)
+                {
+                    category.CategoryType = null;
+                }
+
                 _context.CategoryTypes.Remove(CategoryType);
                 await _context.SaveChangesAsync();
             }

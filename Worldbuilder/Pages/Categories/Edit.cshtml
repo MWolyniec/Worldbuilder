@@ -25,6 +25,22 @@
                 <span asp-validation-for="Category.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Category.CategoryType" class="control-label"></label>
+                <br />
+                @if (Model.Category.CategoryType != null)
+                {
+                    <text>| </text>
+                    <a asp-page="/CategoryTypes/Details" asp-route-id="@Model.Category.CategoryType.Id">
+                        @Html.DisplayFor(modelItem => Model.Category.CategoryType.Name, new { style = "color:red" })
+                    </a>
+                    <text> |</text>
+
+                }
+                <br />
+                <select asp-for="CategoryTypeSelection" asp-items="Model.CategoryTypesSelectList" class="form-control" size="10"></select>
+                <small class="form-text text-muted">You can choose one category type.</small>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

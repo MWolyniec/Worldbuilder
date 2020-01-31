@@ -12,7 +12,7 @@
 </p>
 <form>
     <p>
-        <select asp-for="CategoryType" asp-items="Model.CategoryTypes">
+        <select asp-for="CategoryTypeAsString" asp-items="Model.CategoryTypesAsSelectList">
             <option value="">All</option>
         </select>
         Look for: <input type="text" asp-for="SearchString" />
@@ -39,7 +39,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model.Categories)
+        @foreach (var item in Model.Categories)
         {
             <tr>
                 <td>
@@ -51,9 +51,13 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-page="/CategoryTypes/Details" asp-route-id="@item.Id">
-                        @Html.DisplayFor(modelItem => item.CategoryType.Name)
-                    </a>
+                    @if (item.CategoryType != null)
+                    {
+                        <a asp-page="/CategoryTypes/Details" asp-route-id="@item.CategoryType.Id">
+                            @Html.DisplayFor(modelItem => item.CategoryType.Name)
+                        </a>
+                    }
+
                 </td>
                 <td>
                     <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

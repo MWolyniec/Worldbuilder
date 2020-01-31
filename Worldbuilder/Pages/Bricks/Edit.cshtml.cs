@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Worldbuilder.Helpers;
 using Worldbuilder.Model;
 
 namespace Worldbuilder.Pages.Bricks
@@ -56,10 +56,10 @@ namespace Worldbuilder.Pages.Bricks
             {
                 return NotFound();
             }
-            AllBricks = await _context.Brick
+            AllBricks = await _context.Bricks
                .ToListAsync();
 
-            Brick = await _context.Brick
+            Brick = await _context.Bricks
                 .Include(c => c.BrickCategories)
                 .Include(p => p.Children)
                 .Include(d => d.Parents)
@@ -76,8 +76,11 @@ namespace Worldbuilder.Pages.Bricks
             AllCategories = await _context.Categories.OrderBy(x => x.Name).ToListAsync();
 
             Categories = new SelectList(AllCategories, nameof(Category.Id), nameof(Category.Name));
-            Children = new SelectList(AllBricks, nameof(Brick.Id), nameof(Brick.Name));
-            Parents = new SelectList(AllBricks, nameof(Brick.Id), nameof(Brick.Name));
+            Children = new SelectList(AllBricks.Where(x => !(x.Id == this.Brick.Id)), nameof(Brick.Id), nameof(Brick.Name));
+            Parents = new SelectList(AllBricks.Where(x => !(x.Id == this.Brick.Id)), nameof(Brick.Id), nameof(Brick.Name));
+
+
+
 
             CategorySelect = Brick.BrickCategories.Select(x => x.CategoryId).ToTwoArrays(out categorySelectionOrig);
             ChildrenSelect = Brick.Children.Select(x => x.ChildId).ToTwoArrays(out childrenSelectOrig);
@@ -95,7 +98,7 @@ namespace Worldbuilder.Pages.Bricks
 
         public async Task<IActionResult> OnPostToIndexAsync()
         {
-            if (await CheckAndSaveChanges())
+            if (await ChangesCheckedAndSavedSuccessfully())
                 return RedirectToPage("./Index");
             else return NotFound();
         }
@@ -103,24 +106,19 @@ namespace Worldbuilder.Pages.Bricks
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (await CheckAndSaveChanges())
+
+            if (await ChangesCheckedAndSavedSuccessfully())
                 return RedirectToPage("./Details", new { id = this.Brick.Id });
             else return NotFound();
         }
 
 
-        public async Task<bool> CheckAndSaveChanges()
+        public async Task<bool> ChangesCheckedAndSavedSuccessfully()
         {
-            if (!ModelState.IsValid)
-            {
-                var err = ModelState.Select(x => x.Value.Errors)
-                            .Where(y => y.Count > 0)
-                            .ToList();
-                throw new Exception($"Model is invalid, ModelState has {err.Count} errors. Try turning the page off and on again.");
-            }
+
+            ModelChecker.Check(this.ModelState);
 
             TempData.CorrectEmptyArrays<int>();
-
 
             UpdateJoinTableFromSelectList.Update(_context.BrickCategories, Brick, TempData[nameof(categorySelectionOrig)] as int[], CategorySelect);
 
@@ -130,6 +128,9 @@ namespace Worldbuilder.Pages.Bricks
 
             TempData.Clear();
 
+            return await SaveChanges.SavedSuccessfully(this._context, this._context.Bricks, this.Brick);
+
+            /*
             _context.Attach(Brick).State = EntityState.Modified;
 
             try
@@ -138,7 +139,7 @@ namespace Worldbuilder.Pages.Bricks
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BrickExists(Brick.Id))
+                if (!_context.Bricks.Any(e => e.Id == Brick.Id))
                 {
                     return false;
                 }
@@ -148,12 +149,8 @@ namespace Worldbuilder.Pages.Bricks
                 }
 
             }
-            return true;
+            return true;*/
         }
 
-        private bool BrickExists(int id)
-        {
-            return _context.Brick.Any(e => e.Id == id);
-        }
     }
 }

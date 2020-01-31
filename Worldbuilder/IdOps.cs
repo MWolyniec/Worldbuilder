@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Worldbuilder
 {
@@ -10,7 +8,7 @@ namespace Worldbuilder
 
     public static class IdOps
     {
-        
+
 
         /// <summary>
         /// Checks if a property is the id of the given type.
@@ -21,17 +19,17 @@ namespace Worldbuilder
         /// <param name="idOption">IdOptions: Own, Objects or Related.</param>
         /// <returns></returns>
         public static bool IsId(this PropertyInfo p, Type type, IdOptions idOption)
-        {   
+        {
             bool withId = p.Name.EndsWith("Id");
 
-            switch(idOption)
+            switch (idOption)
             {
                 case IdOptions.Own:
-                    return withId 
+                    return withId
                         && ((p.Name.StartsWith(type.Name) && p.Name.Length == 2 + type.Name.Length) || (p.Name.Length == 2))
-                        && p.DeclaringType.Equals(type);
+                        && (p.DeclaringType.Equals(type) || p.DeclaringType.IsAssignableFrom(type));
                 case IdOptions.Objects:
-                    return withId 
+                    return withId
                         && p.Name.StartsWith(type.Name)
                         && p.Name.Length == 2 + type.Name.Length
                         && !p.DeclaringType.Equals(type);
@@ -53,13 +51,13 @@ namespace Worldbuilder
         /// <returns></returns>
         public static PropertyInfo GetId(this Type type, Type objectsType, IdOptions idOption)
         {
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 
             var result = properties.FirstOrDefault(x => x.IsId(objectsType, idOption));
 
-            if(result == null) throw new ArgumentException("Given type does not have any Id property following EF Core naming rules.");
+            if (result == null) throw new ArgumentException("Given type does not have any Id property following EF Core naming rules.");
             else return result;
-            
+
         }
         /// <summary>
         /// Finds the ID property in a given type.
@@ -67,11 +65,11 @@ namespace Worldbuilder
         /// <returns></returns>
         public static PropertyInfo GetId(this Type type)
         {
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 
             var result = properties.FirstOrDefault(x => x.IsId(type, IdOptions.Own));
 
-            if(result == null) throw new ArgumentException("Given type does not have any Id property following EF Core naming rules.");
+            if (result == null) throw new ArgumentException("Given type does not have any Id property following EF Core naming rules.");
             else return result;
 
         }
@@ -84,9 +82,9 @@ namespace Worldbuilder
         /// <returns></returns>
         static public bool HasId(this Type type, IdOptions idOption = IdOptions.Own)
         {
-                return type
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Any(p => p.IsId(type, idOption));
+            return type
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
+            .Any(p => p.IsId(type, idOption));
         }
 
 

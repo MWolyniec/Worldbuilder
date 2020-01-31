@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using Worldbuilder.Model.BaseClasses;
 
 namespace Worldbuilder.Model
 {
-    public class Category
+    public class Category : IdName
     {
-        public int Id { get; set; }
 
-        [StringLength(50), Required]
-        public string Name { get; set; }
 
         [Display(Name = "Description"), DataType(DataType.MultilineText)]
         public string Description { get; set; }

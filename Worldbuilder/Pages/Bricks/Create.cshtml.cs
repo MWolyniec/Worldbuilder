@@ -57,7 +57,7 @@ namespace Worldbuilder.Pages.Bricks
                 return false;
             }
 
-            _context.Brick.Add(Brick);
+            _context.Bricks.Add(Brick);
             await _context.SaveChangesAsync();
             return true;
 

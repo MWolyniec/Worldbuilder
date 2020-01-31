@@ -47,7 +47,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model.Brick)
+        @foreach (var item in Model.Brick)
         {
             <tr>
                 <td style="text-align:left;">
@@ -59,12 +59,12 @@
                     @Html.DisplayFor(modelItem => item.ShortDesc)
                 </td>
                 <td>
-                    @if(item.BrickCategories != null)
+                    @if (item.BrickCategories != null)
                     {
-                        foreach(var category in item.BrickCategories)
+                        foreach (var category in item.BrickCategories)
                         {
                             <text>| </text>
-                            <a asp-page="/Categories/Details" asp-route-id="@item.Id">
+                            <a asp-page="/Categories/Details" asp-route-id="@category.CategoryId">
                                 @Html.DisplayFor(modelItem => category.Category.Name)
                             </a>
                             <text> |</text>
@@ -72,9 +72,9 @@
                     }
                 </td>
                 <td>
-                    @if(item.Children != null)
+                    @if (item.Children != null)
                     {
-                        foreach(var child in item.Children)
+                        foreach (var child in item.Children)
                         {
                             <text>></text>
                             <a asp-page="./Details" asp-route-id="@child.Child.Id">
@@ -84,9 +84,9 @@
                     }
                 </td>
                 <td>
-                    @if(item.Parents != null)
+                    @if (item.Parents != null)
                     {
-                        foreach(var parent in item.Parents)
+                        foreach (var parent in item.Parents)
                         {
                             <text>></text>
                             <a asp-page="./Details" asp-route-id="@parent.Brick.Id">

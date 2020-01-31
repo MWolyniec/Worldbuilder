@@ -15,15 +15,15 @@
             @Html.DisplayNameFor(model => model.CategoryType.Categories)
         </dt>
         <dd class="col-sm-10">
-            @if(Model.CategoryType.Categories != null)
+            @if (Model.CategoryType.Categories != null)
             {
-            @foreach(var category in Model.CategoryType.Categories)
-            {
-            <text>| </text>
-            <a asp-page="/Categories/Details" asp-route-id="@category.Id">
-                @Html.DisplayFor(modelItem => category.Name)
-            </a>
-            <text> |</text>
+                @foreach (var category in Model.CategoryType.Categories)
+                {
+                    <text>| </text>
+                    <a asp-page="/Categories/Details" asp-route-id="@category.Id">
+                        @Html.DisplayFor(modelItem => category.Name)
+                    </a>
+                    <text> |</text>
                 }
             }
 
@@ -32,5 +32,6 @@
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.CategoryType.Id">Edit</a> |
+    <a asp-page="./Delete" asp-route-id="@Model.CategoryType.Id">Delete</a> |
     <a asp-page="./Index">Back to List</a>
 </div>

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using Worldbuilder.Model;
-using Worldbuilder.Models;
 
 namespace Worldbuilder.Pages.Categories
 {
@@ -49,7 +45,25 @@ namespace Worldbuilder.Pages.Categories
 
             if (Category != null)
             {
+
+
+                foreach (var categoryType in _context.CategoryTypes.Include(x => x.Categories))
+                {
+                    if (categoryType.Categories.Contains(this.Category))
+                        categoryType.Categories.Remove(this.Category);
+                }
+
+
+                foreach (var brickCategory in _context.BrickCategories)
+                {
+                    if (brickCategory.CategoryId.Equals(this.Category.Id))
+                    {
+                        _context.BrickCategories.Remove(brickCategory);
+                    }
+                }
+
                 _context.Categories.Remove(Category);
+
                 await _context.SaveChangesAsync();
             }
 

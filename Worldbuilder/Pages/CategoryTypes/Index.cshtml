@@ -34,20 +34,20 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model.CategoryType)
+        @foreach(var categoryType in Model.CategoryType)
         {
             <tr>
                 <td>
-                    <a asp-page="./Details" asp-route-id="@item.Id">
-                        @Html.DisplayFor(modelItem => item.Name)
+                    <a asp-page="./Details" asp-route-id="@categoryType.Id">
+                        @Html.DisplayFor(modelItem => categoryType.Name)
                     </a>
                 </td>
                 <td>
-                    @foreach(var cat in item.Categories)
+                    @foreach(var category in categoryType.Categories)
                     {
                         <text>|</text>
-                        <a asp-page="../Categories/Edit" asp-route-id="@cat.Id">
-                            @Html.DisplayFor(itemCategory => cat.Name)
+                        <a asp-page="../Categories/Edit" asp-route-id="@category.Id">
+                            @Html.DisplayFor(itemCategory => category.Name)
                         </a>
                         <text>| </text>
 
@@ -55,9 +55,9 @@
 
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-page="./Edit" asp-route-id="@categoryType.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@categoryType.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@categoryType.Id">Delete</a>
                 </td>
             </tr>
         }
