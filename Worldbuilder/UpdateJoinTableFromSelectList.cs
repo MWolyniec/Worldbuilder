@@ -34,6 +34,7 @@ namespace Worldbuilder
                 relatedIdAsFK = temp;
             }
 
+            //TODO:Nie przetrzymywac zakomentowanego kodu do wyjebania
 
             /*
             var removedRelations = originalSelection

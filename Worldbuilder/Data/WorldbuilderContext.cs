@@ -9,20 +9,20 @@ namespace Worldbuilder.Models
             : base(options)
         {
         }
-
+//TODO: Wyjebac puste linie
 
         public DbSet<Worldbuilder.Model.Brick> Bricks { get; set; }
         public DbSet<Worldbuilder.Model.Category> Categories { get; set; }
         public DbSet<Worldbuilder.Model.BrickCategory> BrickCategories { get; set; }
         public DbSet<Worldbuilder.Model.BrickToBrick> BrickToBrick { get; set; }
         public DbSet<Worldbuilder.Model.CategoryType> CategoryTypes { get; set; }
-
+        //TODO: Wyjebac puste linie
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BrickCategory>().HasKey(sc => new { sc.BrickId, sc.CategoryId });
-
+            //TODO: Wyjebac puste linie
 
             modelBuilder.Entity<BrickToBrick>()
                 .HasOne(pt => pt.Brick)
