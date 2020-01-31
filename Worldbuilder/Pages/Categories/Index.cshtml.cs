@@ -73,7 +73,7 @@ namespace Worldbuilder.Pages.Categories
                 .ToListAsync();
 
 
-            var categories = _context.Categories.Select(x => x);
+            var categories = _context.Categories.Include(d => d.CategoryType).Select(x => x);
 
             if (!string.IsNullOrEmpty(SearchString))
             {
